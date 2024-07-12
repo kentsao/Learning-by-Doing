@@ -22,3 +22,22 @@ class Sigmoid:
     def backward(self, dout):
         dx = dout * self.out * (1 - self.out)
         return dx
+    
+class Affine:
+    def __init__(self, W, b):
+        self.W = W
+        self.b = b
+        self.x = None
+        self.dW = None
+        self.db = None
+    def forwrad(self, x):
+        self.x = x
+        out = np.dot(x, self.W) + self.b
+        return out
+    def backward(self, dout):
+        # Need to consider the shape of the x, w, dout
+        dx = np.dot(dout, self.W.T)
+        self.dW = np.dot(self.x.T, dout)
+        # backward of repeat function, it should sum up. Shape can be the hint
+        self.db = np.sum(dout, axis=0)
+        return dx
